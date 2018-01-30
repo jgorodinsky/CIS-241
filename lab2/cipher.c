@@ -26,6 +26,7 @@ int main(int argc, char* argv[])
 
 
 	len = strlen(argv[2]);
+
 	key_arr = (int*)malloc(len * sizeof(int));	
 
 	char *myString = argv[2];
@@ -47,7 +48,7 @@ int main(int argc, char* argv[])
 
 	while ( fscanf(fin, "%c", &ch) != EOF )
 	{
-		key = key_arr[n%4];
+		key = key_arr[n%len];
 	
 		if (choice == 2)
                		key = -key;
