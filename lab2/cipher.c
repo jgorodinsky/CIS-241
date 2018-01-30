@@ -29,19 +29,12 @@ int main(int argc, char* argv[])
 	key_arr = (int*)malloc(len * sizeof(int));	
 
 	char *myString = argv[2];
+
 	int i = 0;
 	while(i < len){
 		key_arr[i] = letter_convert(myString[i]);
-		printf("%d", key_arr[i]);
-		printf(" ");
-		printf("%c", myString[i]);
-		printf("\n");
 		i++;
         }
-
-	printf("\n\n");
-	
-		
 
     	fin = fopen(argv[3], "r");
 	fout = fopen(argv[4], "w");
@@ -55,7 +48,7 @@ int main(int argc, char* argv[])
 	while ( fscanf(fin, "%c", &ch) != EOF )
 	{
 		key = key_arr[n%4];
-
+	
 		if (choice == 2)
                		key = -key;
 
