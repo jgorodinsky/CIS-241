@@ -22,8 +22,6 @@ int main(int argc, char* argv[])
 	}
 
 	choice = atoi(argv[1]);
-	key = atoi(argv[2]);
-
 
 	len = strlen(argv[2]);
 
