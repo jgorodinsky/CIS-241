@@ -29,7 +29,7 @@ int main()
             {
                 printf("The original string is:\n%s\n", line);
                 printf("The first substring:  %s\n", strnsub(p1, LEN));
-                printf("The second substring: %s\n\n", strnsub(p2, LEN));
+                printf("The second substring: %s\n", strnsub(p2, LEN));
                 return 0;
             }
                j++;
@@ -46,19 +46,21 @@ int main()
 
 
 // returns a string with the first n characters of string p
+// https://www.programmingsimplified.com/c/source-code/c-substring
 char* strnsub (char *p, int n)
 {
-    char *pointer;
+    char *pntr;
     int i;
-
-    pointer = malloc(n + 1);
+ 
+    //allocates memory of appropriate size to the pointer
+    pntr = malloc(n + 1);
  
     for(i = 0; i < n; i++){
-        *(pointer+i) = *(p);
+        *(pntr+i) = *(p);
         p++;
     }
-    *(pointer+i) = '\0';
+    *(pntr+i) = '\0';
     
-     return pointer;
+     return pntr;
 }
 
