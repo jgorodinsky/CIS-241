@@ -2,10 +2,14 @@ functions: functions.o
 		gcc functions.o -o functions
 functions.o: functions.c
 
-test: test1 test2 test3
+test: test1
 test1:
-	./functions e
+	./functions e ABCCD  test.txt test.out
 test2:
-	./functions d
+	./functions d ABCCCCCD test.out test.bak
 test3:
-	./functions f
+	./functions f TEST
+test4:
+	./functions e ZAB
+test5:
+	./functions e D

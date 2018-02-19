@@ -1,9 +1,12 @@
 #include "functions.h"
 #include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <ctype.h>
 
 int main(int argc, char* argv[]){
-	int choice = -1;
-	FILE *fin, *fout;
+	int choice, len;
+	char *key, encrypt[26], decrypt[26];
 	
 	//put down below with other error
 	//if(argc != 5)
@@ -14,24 +17,232 @@ int main(int argc, char* argv[]){
 		choice = 0;
 	else if(myString[0] == 'd')
 		choice = 1;
-	
-	if(choice == -1){
+	else{
 		printf("Error: Please enter a valid input.\n");
-		exit(1);
+                exit(1);
 	}
+	
+
+	//printf("%d\n", choice);
+
+	key = removeDuplicates(argv[2]);
+
+	printf("%s\n", key);
+	printf("%s\n", argv[3]);
+	
+	initializeEncryptArray(key,encrypt);
+
+	printf("%s\n", encrypt);	
+
+	initializeDecryptArray(encrypt, decrypt);
+	removeDuplicates(decrypt);	
+
+	printf("%s\n", decrypt);
+
+	FILE *fin = fopen(argv[3], "r");
+	FILE *fout = fopen(argv[4], "w");
+
+	processInput(fin, fout, decrypt);
 
 	return 0;
 }
 
-char * removeDuplicates(char word[]){
-	char* used = "";
-	int len = strlen(word);
-	int i = 0;
-	while(i < len){
-		if(strchr(used, word){
+char* removeDuplicates(char word[]){
+	int length = sizeof(word)/sizeof(word[0]);
+	
+	int i;
+
+	for(i = 1; i < length; i++){
+		//printf("%d %c\n",i, word[i]);
+		if(word[i] == '\0'){
+			break;
 		}
-		i++;
+		//printf("%d %d\n", i, targetFound(word, i, word[i]));
+		if(targetFound(word, i, word[i]) == 1){
+			//move all elements after i left one
+			int j;
+			for(j=i; j < length; j++){	
+					word[j] = word[j+1];
+			}			
+
+			length = sizeof(word)/sizeof(word[0]);
+			i--;
+		}
+	}
+	
+	//word[i] = '\0';
+	
+	return word;
+}
+
+int targetFound(char charArray[], int num, char target){
+	int i;
+	for(i = 0; i < num; i++){
+		if(charArray[i] == target){
+			return 1;
+		}
+	}	
+
+	return 0;
+}
+
+void initializeEncryptArray(char key[], char encrypt[]){
+	char alpha[] = "ZYXWVUTSRQPONMLKJIHGFEDCBA";
+	
+	int i, j = 0, start;
+	
+	int length = sizeof(key)/sizeof(key[0])-1;
+	for(i = 0; i < length; i++){
+		if(key[i] == '\0'){
+			length = i;
+			break;
+		}
+		encrypt[i] = key[i];
 	}
 
-	return '0';
+	start = length;
+
+	length = sizeof(alpha)/sizeof(alpha[0]) - 1;
+	
+
+	for(i = start; i < length; i++){
+		if(j == 26){
+			break;
+		}	
+			while(targetFound(encrypt, i, alpha[j])){
+				j++;
+				if(j == 26){
+					break;
+				}
+			}		
+			encrypt[i] = alpha[j];
+		j++;
+	}
+
+}
+
+void initializeDecryptArray(char encrypt[], char decrypt[]){
+	char alpha[] = "ZYXWVUTSRQPONMLKJIHGFEDCBA";
+	char beta[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	//int length = sizeof(encrypt)/sizeof(encrypt[0])-1;
+	int length = 26, LEN = 26;
+	//printf("%d\n", length);
+        int i, j;
+
+	char *p1, *p2;
+
+
+	 i = 0;
+    	 j = 0;
+
+	/*p2 = &alpha[0];
+	p1 = &encrypt[0];
+    	while ( i < LEN){
+
+		//j = i;
+        	p1 = &encrypt[i];
+        	p2 = &alpha[0];
+	
+        	while ( j < LEN){
+		
+			while(i < LEN){
+				p1 = &encrypt[i];
+				p2 = &alpha[j];
+				if ( strncmp(p1,p2, LEN - 1 - i) == 0 && i != LEN - 1){
+	
+					p1 = &encrypt[0];
+					printf("%c\n", p1[i-1]);
+					strcpy(decrypt, encrypt);
+					return;
+				}
+				i++;	
+			}	
+			//printf("\n");
+			j++;
+			i = j;
+			p2 = &alpha[j];
+			//p2 = strnsub(p2, i);
+			p1 = &encrypt[i];
+        	}
+		//i++;
+		i = j;
+                //p2 = strnsub(p2, LEN - 1 - j);
+               
+    }
+*/
+
+	for(i = 0; i < length; i++){
+		decrypt[i] = beta[i];
+	
+	}
+	decrypt[i] = '\0';
+
+
+}
+
+char* strnsub (char *p, int n)
+{
+    	char *pntr;
+    	int i;
+ 
+    	//allocates memory of appropriate size to the pointer
+	pntr = malloc(n + 1);
+         
+        for(i = 0; i < n; i++){
+                *(pntr+i) = *(p);
+		p++;
+	}
+	*(pntr+i) = '\0';
+                                         
+	return pntr;
+}
+    
+char encryptChar(char ch, int k)
+{
+	if ( k < 0 )
+		k = k + 26;
+
+	if ( isupper(ch) )
+		return (ch - 'A' + k) % 26 + 'A';
+	
+	if ( islower(ch) )
+		return (ch - 'a' + k) % 26 + 'a';
+	
+	return ch;
+}   
+
+void processInput(FILE * inf, FILE *outf, char substitute[]){
+	char key, ch;
+	int n = 0, len = 25;
+
+
+        if (inf ==  NULL || outf == NULL)
+        {
+                printf("File could not be opened\n");
+                exit(1);
+        }
+
+        while ( fscanf(inf, "%c", &ch) != EOF )
+        {
+                key = substitute[n%len];
+
+                fprintf(outf, "%c", encryptChar(ch, letter_convert(key)));
+                n++;
+        }
+
+        fclose(inf);
+        fclose(outf);
+
+	
+}
+
+
+int letter_convert(char ch){
+//https://stackoverflow.com/questions/1469711/converting-letters-to-numbers-in-c
+	int rtn = 0;
+	if (ch >= 'A' && ch <= 'Z')
+		rtn = ch - 'A';
+	else if (ch >= 'a' && ch <= 'z')
+		rtn = ch - 'a'; 		
+	return rtn;
 }
