@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
-
+/*
 int main(int argc, char* argv[]){
 	int choice, len;
 	char *key, encrypt[26], decrypt[26];
@@ -42,7 +42,87 @@ int main(int argc, char* argv[]){
 	FILE *fin = fopen(argv[3], "r");
 	FILE *fout = fopen(argv[4], "w");
 
-	processInput(fin, fout, decrypt);
+	if(choice == 0){
+		processInput(fin, fout, encrypt);
+	} else{
+		processInput(fin, fout, decrypt);
+	}
+
+	return 0;
+}
+*/
+
+int main(int argc, char* argv[])
+{  
+	int choice, key, len, n = 0;
+	char ch, *key_arr, encrypt[27], decrypt[26];
+	FILE *fin, *fout;
+
+	if (argc != 5)
+	{
+		printf ("Usage: cipher option key infile, outfile\n");
+		printf ("Option 1 for encryption and 2 for decryption");
+		exit(1);
+	}
+
+		choice = atoi(argv[1]);
+	key = atoi(argv[2]);
+
+
+	len = 26;
+
+	key_arr = (char*)malloc(len * sizeof(char));	
+
+	char *myString = argv[1];
+
+	if(myString[0] == 'e')
+		choice = 0;
+	else if(myString[0] == 'd')
+		choice = 1;
+	else{
+		printf("Error: Please enter a valid input.\n");
+                exit(1);
+	}
+
+	key_arr = argv[2];
+
+	initializeEncryptArray(key_arr, encrypt);
+	initializeDecryptArray(encrypt, decrypt);
+
+	printf("%s\n", encrypt);
+	printf("%s\n\n", decrypt);
+
+    	fin = fopen(argv[3], "r");
+	fout = fopen(argv[4], "w");
+    
+    	if (fin ==  NULL || fout == NULL) 
+	{
+		printf("File could not be opened\n");
+		exit(1);
+	}
+
+	/*while ( fscanf(fin, "%c", &ch) != EOF )
+	{
+		key = encrypt[n%len];
+	
+		printf("%c\n", encrypt[n%len]);
+
+		if (choice == 1)
+               		key = -key;
+
+		fprintf(fout, "%c", encryptChar(ch, key));
+		n++;
+	}
+
+	fclose(fin);
+	fclose(fout);*/
+
+	if(choice == 0){
+		processInput(fin, fout, encrypt);
+	}
+	else{
+		processInput(fin, fout, decrypt);
+	}
 
 	return 0;
 }
@@ -118,7 +198,7 @@ void initializeEncryptArray(char key[], char encrypt[]){
 			encrypt[i] = alpha[j];
 		j++;
 	}
-
+	encrypt[i] = '\0';
 }
 
 void initializeDecryptArray(char encrypt[], char decrypt[]){
@@ -172,9 +252,13 @@ void initializeDecryptArray(char encrypt[], char decrypt[]){
 */
 
 	for(i = 0; i < length; i++){
-		decrypt[i] = beta[i];
-	
+		//decrypt[i] = beta[i];
 	}
+
+	for(i = 0; i < strlen(encrypt); i++){
+		decrypt[i] = encrypt[i] - i;
+	}
+
 	decrypt[i] = '\0';
 
 
@@ -212,11 +296,11 @@ char encryptChar(char ch, int k)
 }   
 
 void processInput(FILE * inf, FILE *outf, char substitute[]){
-	char key, ch;
-	int n = 0, len = 25;
+	char ch;
+	int key, n = 0, len = 25;
 
 
-        if (inf ==  NULL || outf == NULL)
+        /*if (inf ==  NULL || outf == NULL)
         {
                 printf("File could not be opened\n");
                 exit(1);
@@ -228,7 +312,25 @@ void processInput(FILE * inf, FILE *outf, char substitute[]){
 
                 fprintf(outf, "%c", encryptChar(ch, letter_convert(key)));
                 n++;
+        }*/
+
+
+	 while ( fscanf(inf, "%c", &ch) != EOF )
+        {
+                key = substitute[n%len];
+
+                //printf("%c\n", substitute[n%len]);
+
+                //if (choice == 1)
+                  //      key = -key;
+
+                fprintf(outf, "%c", encryptChar(ch, key));
+                n++;
         }
+
+       // fclose(fin);
+        //fclose(fout);
+
 
         fclose(inf);
         fclose(outf);

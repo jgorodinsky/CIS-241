@@ -2,11 +2,11 @@ functions: functions.o
 		gcc functions.o -o functions
 functions.o: functions.c
 
-test: test1
+test: test1 test2
 test1:
-	./functions e ABCCD  test.txt test.out
+	./functions e ABC  test.txt test.out
 test2:
-	./functions d ABCCCCCD test.out test.bak
+	./functions d ABC test.out test.bak
 test3:
 	./functions f TEST
 test4:
