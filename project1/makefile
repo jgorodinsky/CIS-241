@@ -1,15 +1,23 @@
-functions: functions.o
-		gcc functions.o -o functions
-functions.o: functions.c
+all: functions.h functions.o p1.o
+	gcc -o p functions.o p1.o
 
-test: test1 test2
-test1:
-	./functions e ABC  test.txt test.out
-test2:
-	./functions d ABC test.out test.bak
-test3:
-	./functions f TEST
-test4:
-	./functions e ZAB
-test5:
-	./functions e D
+p1.o: functions.h p1.c
+	gcc -c p1.c
+
+functions.o: functions.h functions.c
+	gcc -c functions.c
+
+enc: 
+	./p e GOODMORNING test.txt test.out
+
+dec: 
+	./p d GOODMORNING test.out test.bak
+
+test:
+	./p e GOODMORNING test.txt test.out
+	./p d GOODMORNING test.out test.bak
+	diff -s test.txt test.bak
+
+clean:
+	rm -f *.o p test.out test.bak
+
