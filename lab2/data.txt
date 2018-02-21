@@ -2,4 +2,4 @@ In cryptography, a Caesar cipher, also known as Caesar's cipher, the shift ciphe
 
 There are 26 such cyphers over the English alphabet. In the simplest, A is replaced with B, B is replaced with C, and so on, up to Z, which is replaced with A. This is called a rotate-one Caesar cypher because it rotates the alphabet one place. A rotate-two cypher replaces A with C, B with D, and so on up to Z which is replaced by B. 
 
-The encryption step performed by a Caesar cipher is often incorporated as part of more complex schemes, such as the Vigenère cipher, and still has modern application in the ROT13 system. As with all single alphabet substitution ciphers, the Caesar cipher is easily broken and in modern practice offers essentially no communication security.i
+The encryption step performed by a Caesar cipher is often incorporated as part of more complex schemes, such as the Vigenère cipher, and still has modern application in the ROT13 system. As with all single alphabet substitution ciphers, the Caesar cipher is easily broken and in modern practice offers essentially no communication security.
