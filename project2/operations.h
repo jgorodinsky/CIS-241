@@ -5,7 +5,7 @@
 
 #define N 20
 
-struct product{
+typedef struct product{
 	char name[20];
 	float quantity;
 	char q_unit[20];
@@ -13,15 +13,13 @@ struct product{
 	char p_unit[20];
 
 	struct product *next;
-};
-
-typedef struct product product;
+} product;
 
 //insert a node to the list
 int insert(product **l, product node);
 
 //remove a node from list
-void rmItem(product **l, product *node);
+void rmItem(product *l, product *node);
 
 //show list
 void showList(product *l);
