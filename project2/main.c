@@ -6,19 +6,6 @@
 
 int main(int argc, char* argv[]){
 
-	printf("\nWelcome to Kroger++\n");	
+	doIt(*argv);
 
-	print_messages();
-	
-	int choice;
-
-	//Gets user input
-	scanf("%d", &choice);
-//	printf("You have chosen %d\n", choice);
-	printf("\n");
-
-	product product;
-	
 }
-
-
