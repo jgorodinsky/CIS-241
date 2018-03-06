@@ -36,6 +36,14 @@ void print_messages(){
 }
 
 int insert(product *l, product node){
+	product *tmp = l;
+	
+	while(tmp -> next != NULL){
+		tmp = tmp -> next;
+	}
+
+	tmp -> next = &node;
+	
 	return 0;
 }
 
@@ -119,7 +127,8 @@ int doIt(char data[]){
 
 				printf("What price unit does this product use?\n");
 				scanf("%20s", &tmp.p_unit);				
-	
+				insert(head, tmp);				
+					
 				break;
 			case 2:
 				break;
