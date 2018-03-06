@@ -6,17 +6,17 @@
 #define N 20
 
 typedef struct product{
-	char name[20];
+	char name[N];
 	float quantity;
-	char q_unit[20];
+	char q_unit[N];
 	double price;
-	char p_unit[20];
+	char p_unit[N];
 
 	struct product *next;
 } product;
 
 //insert a node to the list
-int insert(product **l, product node);
+int insert(product *l, product node);
 
 //remove a node from list
 void rmItem(product *l, product *node);
