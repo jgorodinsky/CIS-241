@@ -4,12 +4,17 @@
 #include <stdio.h>
 #include <ctype.h>
 
+/*
+ * Remove duplicate characters in array word
+ * return the resulting string
+ */
 char* removeDuplicates(char word[]){
 	int length = strlen(word);
 	
 	int i, pos;
 
 	for(i = 1; i < length; i++){
+		//if the current char is the terminating value
 		if(word[i] == '\0'){
 			break;
 		}
@@ -29,6 +34,11 @@ char* removeDuplicates(char word[]){
 	return word;
 }
 
+/*
+ * Search the first nun characters in array charArray for 
+ * 	character target
+ * return a non-zero integer if found, otherwise, returns zero
+ */
 int targetFound(char charArray[], int num, char target){
 	int i;
 	for(i = 0; i < num; i++){
@@ -40,7 +50,12 @@ int targetFound(char charArray[], int num, char target){
 	return 0;
 }
 
+/*
+ * Initialize the encrypt array with appropriate cipher letters 
+ * 	according to the given key
+ */
 void initializeEncryptArray(char key[], char encrypt[]){
+	//reverse alphabet
 	char alpha[] = "ZYXWVUTSRQPONMLKJIHGFEDCBA";
 	
 	int i, j = 0, start;
@@ -75,7 +90,11 @@ void initializeEncryptArray(char key[], char encrypt[]){
 
 }
 
+/*
+ * Initialize the decrypt array with appropriate substitute letters based on the *	encrypt array
+ */
 void initializeDecryptArray(char encrypt[], char decrypt[]){
+	//alphabet
 	char beta[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         int i;
 
@@ -89,6 +108,9 @@ void initializeDecryptArray(char encrypt[], char decrypt[]){
 
 }
 
+/*
+ * Return a substring of n length from *p
+ */
 char* strnsub (char *p, int n)
 {
     	char *pntr;
@@ -105,21 +127,11 @@ char* strnsub (char *p, int n)
                                          
 	return pntr;
 }
-    
-char encryptChar(char ch, int k)
-{
-	if ( k < 0 )
-		k = k + 26;
 
-	if ( isupper(ch) )
-		return (ch - 'A' + k) % 26 + 'A';
-	
-	if ( islower(ch) )
-		return (ch - 'a' + k) % 26 + 'a';
-	
-	return ch;
-}   
-
+/*
+ * Takes data from the inf, encrypt/decrypts it, then
+ * 	sends the output to the outf
+ */
 void processInput(FILE * inf, FILE *outf, char substitute[]){
 	char ch;
 
@@ -136,15 +148,4 @@ void processInput(FILE * inf, FILE *outf, char substitute[]){
         fclose(inf);
         fclose(outf);
 	
-}
-
-
-int letter_convert(char ch){
-//https://stackoverflow.com/questions/1469711/converting-letters-to-numbers-in-c
-	int rtn = 0;
-	if (ch >= 'A' && ch <= 'Z')
-		rtn = ch - 'A';
-	else if (ch >= 'a' && ch <= 'z')
-		rtn = ch - 'a'; 		
-	return rtn;
 }
