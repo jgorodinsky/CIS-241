@@ -46,6 +46,18 @@ int insert(product *l, product *node){
 }
 
 void rmItem(product *l, product *node){	
+	product *tmp = l;
+
+	while(strcmp(tmp -> next -> name, node -> name) != 0 && tmp -> next != NULL){
+		tmp = tmp -> next;
+	}
+
+	if(strcmp(tmp -> next -> name, node -> name) == 0){
+		product *children = tmp -> next -> next;
+		free(tmp -> next);
+		tmp -> next = children;
+	}
+		
 }
 
 void showList(product *l){
@@ -107,7 +119,7 @@ int doIt(char data[]){
 		tmp -> next = NULL;
 
 		switch(choice){
-			case 1:;
+			case 1:
 				printf("What is the product's name?\n");
 				scanf("%20s", tmp -> name);
 	
@@ -136,6 +148,10 @@ int doIt(char data[]){
 				getchar();
 				break;
 			case 5:
+				printf("What is the name of the product being removed?\n");
+				scanf("%20s", tmp -> name);
+
+				rmItem(head, tmp);
 				break;
 			case 6:
 				break;
