@@ -22,8 +22,6 @@ void processInput(FILE* inf, FILE* outf, char substitute[]);
 //www.programmingsimplified.com/c/source-code/c-substring
 char* strnsub(char *p, int n);
 
-char encryptChar(char ch, int k);
-
+//takes data from the inf, encrypt/decrypts it, then sends it
+//to the outf
 void processInput(FILE * inf, FILE *outf, char substitute[]);
-
-int letter_convert(char ch);
