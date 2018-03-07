@@ -16,7 +16,7 @@ typedef struct product{
 } product;
 
 //insert a node to the list
-int insert(product *l, product node);
+int insert(product *l, product *node);
 
 //remove a node from list
 void rmItem(product *l, product *node);
