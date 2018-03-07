@@ -10,10 +10,10 @@ void print_messages(){
 
 
         char* options[] = {
-                                "Add product to store" , "Purchase product from store",
+                                "Add product to store" , "Purchase product",
                                 "Check price of a product", "Show products in store",
-                                "Clean up a product from store", "Find product",
-                                "Inventory", "Done for today"
+                                "Remove product from store", "Find product",
+                                "Inventory", "Exit"
 
                         };
 
@@ -35,15 +35,13 @@ void print_messages(){
         printf("%s\n", border);
 }
 
-int insert(product *l, product node){
-	product *tmp = l;
-	
+int insert(product *l, product *node){
+	product* tmp = l;
+
 	while(tmp -> next != NULL){
 		tmp = tmp -> next;
 	}
-
-	tmp -> next = &node;
-	
+	tmp -> next = node;
 	return 0;
 }
 
@@ -53,7 +51,6 @@ void rmItem(product *l, product *node){
 void showList(product *l){
 	product *tmp = l;
 	
-	printf("\n");
 	while(tmp != NULL){
 		printf("%s\n", tmp -> name);
 		tmp = tmp -> next;
@@ -93,42 +90,40 @@ int doIt(char data[]){
 	char in_char[N];
 
 	//load data
-	product *head = NULL;
-	head = malloc(sizeof(head));
-
-	if(head == NULL){
-		printf("\nMemory assignment Error\n");
-	}
-
-	strcpy(head -> name,"AY");
 	
+	product* head;
+	head = (product*)malloc(sizeof(product));
+
+	//DELETE AFTER IMPLEMENTING FILE LOADING
+	strcpy(head -> name, "AY");
+	head -> next = NULL;
+
 	//ask input
 	while(choice != 8){
 		print_messages();	
 		scanf("%d", &choice);
-			
+	
+		product* tmp = (product*)malloc(sizeof(product));
+		tmp -> next = NULL;
+
 		switch(choice){
 			case 1:;
-				product tmp;		
-
 				printf("What is the product's name?\n");
-				scanf("%20s", &tmp.name);
-				//scanf("%20s", &in_char);
-				//strcpy(tmp.name, in_char);
-
+				scanf("%20s", tmp -> name);
+	
 				printf("How many of these products are there?\n");
-				scanf("%f", &tmp.quantity);
+				scanf("%f", &tmp -> quantity);
 
 				printf("What quantity unit does this product use?\n");
-				scanf("%20s", &tmp.q_unit);
+				scanf("%20s", tmp -> q_unit);
 
 				printf("How much does this product cost?\n");
-				scanf("%f", &tmp.price);				
+				scanf("%f", &tmp -> price);				
 
 				printf("What price unit does this product use?\n");
-				scanf("%20s", &tmp.p_unit);				
-				insert(head, tmp);				
-					
+				scanf("%20s", tmp -> p_unit);				
+			
+				insert(head, tmp);
 				break;
 			case 2:
 				break;
