@@ -63,8 +63,10 @@ void rmItem(product *l, product *node){
 void showList(product *l){
 	product *tmp = l;
 	
+	printf("\n   PRODUCT LIST:\n");
+		
 	while(tmp != NULL){
-		printf("%s\n", tmp -> name);
+		printf("   %s\n", tmp -> name);
 		tmp = tmp -> next;
 	}	
 }
@@ -143,7 +145,7 @@ int doIt(char data[]){
 				break;
 			case 4:
 				showList(head);
-				printf("Press ENTER to continue\n");
+				printf("\nPress ENTER to continue\n");
 				getchar();
 				getchar();
 				break;
