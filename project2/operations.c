@@ -90,7 +90,25 @@ int saveData(char outf[], product *l){
 }
 
 float purchase(product *l, char product[], float q){
-	return q;
+	
+	struct product* tmp = l;
+
+	while(tmp != NULL){
+		if(strcmp(tmp -> name, product) == 0){
+
+			if( q < tmp -> quantity){
+				tmp -> quantity = tmp -> quantity - q;
+			
+				return tmp -> quantity;
+			}
+		
+			return -1;
+		}		
+
+		tmp = tmp -> next;
+	}
+	
+	return -1;
 }
 
 void check_price(product *l, char p[]){
@@ -140,6 +158,18 @@ int doIt(char data[]){
 				insert(head, tmp);
 				break;
 			case 2:
+				printf("What is the name of the product being purchased?\n");
+				scanf("%20s", tmp -> name);
+				
+				printf("How many units are being purchased?\n");
+				scanf("%f", &tmp -> quantity);
+
+				float quantity = purchase(head, tmp -> name, tmp -> quantity);
+	
+				printf("\n   %s now has %.2f units remaining\n", tmp -> name, quantity);
+				printf("\n   Press ENTER to continue\n");
+				getchar();
+				getchar();
 				break;
 			case 3:
 				break;
