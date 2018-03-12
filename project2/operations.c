@@ -50,6 +50,7 @@ int insert(product **l, product *node){
 		}
 		tmp -> next = node;
 	}
+	
 	return 0;
 }
 
@@ -59,15 +60,20 @@ void rmItem(product *l, product *node){
 	if(tmp != NULL){
 
 		if(strcmp(tmp -> name, node -> name) == 0){
-			l = tmp -> next;
+			tmp = l -> next;
 			free(tmp);
 			return;
 		}
 
 		if(tmp -> next != NULL){
-			while(strcmp(tmp -> next -> name, node -> name) != 0 && tmp -> next != NULL){
+			while(tmp -> next != NULL && strcmp(tmp -> next -> name, node -> name) != 0){
 				tmp = tmp -> next;
 			}
+
+			/*if(tmp -> next == NULL){
+				printf("\n   ERROR:  Item not found\n");
+				return;
+			}*/
 
 			if(strcmp(tmp -> next -> name, node -> name) == 0){
 				product *children = tmp -> next -> next;
@@ -77,7 +83,7 @@ void rmItem(product *l, product *node){
 			}
 		}
 
-		printf("\n    ERROR: Item not found\n");
+	//	printf("\n    ERROR: Item not found\n");
 	
 	}
 	else{
@@ -182,7 +188,7 @@ float purchase(product *l, char product[], float q){
 	while(tmp != NULL){
 		if(strcmp(tmp -> name, product) == 0){
 
-			if( q < tmp -> quantity){
+			if( q <= tmp -> quantity){
 				tmp -> quantity = tmp -> quantity - q;
 				
 				printf("\n   %s has %.2f %s remaining\n", tmp -> name, tmp -> quantity, tmp -> q_unit);	
@@ -229,6 +235,11 @@ void findItem(product *l, char p[]){
 
                 tmp = tmp -> next;
         }
+
+	if(tmp == NULL){
+		printf("\n   ERROR: product not found\n");
+		return;
+	}
 
 	if(!(tmp -> quantity == 0 && tmp -> price == 0)){
 		printf("\n   We have %.2lf %s(s) in stock\n", q, tmp -> name);
