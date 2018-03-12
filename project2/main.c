@@ -2,10 +2,14 @@
 #include <string.h>
 #include <stdio.h>
 #include "operations.h"
-#include "operations.c"
 
 int main(int argc, char* argv[]){
-
-	doIt(*argv);
+	if(argc == 2)
+		doIt(*(argv+1));
+	else{
+		char input[] = "data.txt";
+		doIt(input);
+	}
+	return 0;
 
 }

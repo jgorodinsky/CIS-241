@@ -27,7 +27,6 @@ void print_messages(){
         int i = 0;
 
         //Prints Menu Options
-        //FOR MODULIZATION JUST PRINT IT ONE BY ONE, I++, BUT WHENEVER I % 2 == 0, PRINT A NEW LINE
         for(i = 0; i < options_size; i+=2){
                 printf("%d%s%-32s%d%s%-32s\n", i+1, ": ", options[i], i+2, ": ", options[i+1]);
         }
@@ -35,27 +34,54 @@ void print_messages(){
         printf("%s\n", border);
 }
 
-int insert(product *l, product *node){
-	product* tmp = l;
+int insert(product **l, product *node){
+	product* tmp = *l;
 
-	while(tmp -> next != NULL){
-		tmp = tmp -> next;
+	if(tmp == NULL){
+		tmp = (product*)malloc(sizeof(product));
+		tmp = node;
+		tmp -> next = *l;
+		*l = tmp;
 	}
-	tmp -> next = node;
+	else{
+
+		while(tmp -> next != NULL){
+			tmp = tmp -> next;
+		}
+		tmp -> next = node;
+	}
 	return 0;
 }
 
 void rmItem(product *l, product *node){	
 	product *tmp = l;
 
-	while(strcmp(tmp -> next -> name, node -> name) != 0 && tmp -> next != NULL){
-		tmp = tmp -> next;
-	}
+	if(tmp != NULL){
 
-	if(strcmp(tmp -> next -> name, node -> name) == 0){
-		product *children = tmp -> next -> next;
-		free(tmp -> next);
-		tmp -> next = children;
+		if(strcmp(tmp -> name, node -> name) == 0){
+			l = tmp -> next;
+			free(tmp);
+			return;
+		}
+
+		if(tmp -> next != NULL){
+			while(strcmp(tmp -> next -> name, node -> name) != 0 && tmp -> next != NULL){
+				tmp = tmp -> next;
+			}
+
+			if(strcmp(tmp -> next -> name, node -> name) == 0){
+				product *children = tmp -> next -> next;
+				free(tmp -> next);
+				tmp -> next = children;
+				return;
+			}
+		}
+
+		printf("\n    ERROR: Item not found\n");
+	
+	}
+	else{
+		printf("\n    ERROR: List empty\n");
 	}
 		
 }
@@ -66,20 +92,80 @@ void showList(product *l){
 	printf("\n   PRODUCT LIST:\n");
 		
 	while(tmp != NULL){
-		printf("   %s\n", tmp -> name);
+		if(!(tmp -> price == 0 && tmp -> quantity == 0)){
+			printf("   %s\n", tmp -> name);
+		}
 		tmp = tmp -> next;
 	}	
 }
 
 int loadData(char inf[], product **l){
+	//printf("%s\n", inf);
+	FILE* fin;
+	fin = fopen(inf, "r");
+
+	if(fin == NULL){
+		printf("failed");
+		return 1;
+	}
+
+	char *split;	
+	
+	char line[256];
+	while(fgets(line, sizeof(line), fin)){
+		int i = 0;
+		char *info[5];		
+
+		split = strtok(line, " ");
+
+		while(split != NULL){
+			info[i++] = split;
+			split = strtok(NULL, " ");
+		}
+
+		product* tmp;
+		tmp = (product*)malloc(sizeof(product));
+
+		strcpy(tmp -> name, info[0]);
+		tmp -> quantity = atof(info[1]);
+		strcpy(tmp -> q_unit, info[2]);
+		tmp -> price = atof(info[3]);
+		strcpy(tmp -> p_unit, info[4]);	
+		tmp -> next = NULL;
+	
+		if(!(tmp -> quantity == 0 && tmp -> price == 0)){	
+			insert(l, tmp);
+		}	
+	}
+
+
+	fclose(fin);
+
 	return  0;
 }
 
 int saveData(char outf[], product *l){
 	//save data to file
+	FILE *fout;
+	fout = fopen(outf, "w");
+
+	if(fout == NULL)
+		return 1;
+	
+	
+	product *tmp = l;
+
+	while(tmp != NULL){
+			if(!(tmp -> quantity == 0 && tmp -> price == 0)){
+				fprintf(fout, "%s %f %s %lf %s", tmp -> name, tmp -> quantity, tmp -> q_unit, tmp -> price, tmp -> p_unit);
+			}
+			tmp = tmp -> next;
+	}
+
+
+	fclose(fout);
 	
 	//free data
-	struct product* tmp;
         while(l != NULL){
                 tmp = l;
                 l = l -> next;
@@ -144,21 +230,20 @@ void findItem(product *l, char p[]){
                 tmp = tmp -> next;
         }
 
-	printf("\n   We have %.2lf %s(s) in stock", q, tmp -> name);
+	if(!(tmp -> quantity == 0 && tmp -> price == 0)){
+		printf("\n   We have %.2lf %s(s) in stock\n", q, tmp -> name);
+	}
 }
 
 int doIt(char data[]){
+
+
 	int choice = 0;
-	char in_char[N];
 
 	//load data
-	
 	product* head;
 	head = (product*)malloc(sizeof(product));
-
-	//DELETE AFTER IMPLEMENTING FILE LOADING
-	strcpy(head -> name, "AY");
-	head -> next = NULL;
+	loadData(data, &head);
 
 	//ask input
 	while(choice != 8){
@@ -185,7 +270,7 @@ int doIt(char data[]){
 				printf("What price unit does this product use?\n");
 				scanf("%20s", tmp -> p_unit);				
 			
-				insert(head, tmp);
+				insert(&head, tmp);
 				break;
 			case 2:
 				printf("What is the name of the product being purchased?\n");
@@ -217,14 +302,13 @@ int doIt(char data[]){
 				scanf("%20s", tmp -> name);
 
 				findItem(head, tmp -> name);
-				printf("\n");
 				break;
 			case 7:
 				tmp = head;
 				while(tmp != NULL){
 					findItem(tmp, tmp -> name);
 					tmp = tmp -> next;
-					printf("\n");
+					//printf("\n");
 				}
 				break;
 		}
@@ -238,12 +322,8 @@ int doIt(char data[]){
 			getchar();
 		}
 	}
+
 	//save data
-	
-	//deallocate data
-	while(head != NULL){
-		free(head);
-		head = head -> next;
-	}
+	saveData(data, head);
 	return 0;
 }

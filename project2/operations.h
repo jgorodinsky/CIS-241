@@ -16,7 +16,7 @@ typedef struct product{
 } product;
 
 //insert a node to the list
-int insert(product *l, product *node);
+int insert(product **l, product *node);
 
 //remove a node from list
 void rmItem(product *l, product *node);
@@ -42,7 +42,7 @@ void findItem(product *l, char p[]);
 //the job starts here, start with loading data from the file data, and preform the functions by calling related functions.  Ends at saving data to the file data
 int doIt(char data[]);
 
-//Prints out the welcome and options messages
+//prints out the welcome and options messages
 void print_messages();
 
 #endif
