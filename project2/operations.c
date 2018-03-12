@@ -91,30 +91,60 @@ int saveData(char outf[], product *l){
 
 float purchase(product *l, char product[], float q){
 	
-	struct product* tmp = l;
+	struct product *tmp = l;
 
 	while(tmp != NULL){
 		if(strcmp(tmp -> name, product) == 0){
 
 			if( q < tmp -> quantity){
 				tmp -> quantity = tmp -> quantity - q;
-			
+				
+				printf("\n   %s has %.2f %s remaining\n", tmp -> name, tmp -> quantity, tmp -> q_unit);	
 				return tmp -> quantity;
 			}
-		
-			return -1;
+			
+			printf("\n   ERROR: buy amount greater than stock\n");
+			return tmp -> quantity;
 		}		
 
 		tmp = tmp -> next;
 	}
 	
-	return -1;
+	printf("\n   ERROR: product not found\n");
+	return q;
 }
 
 void check_price(product *l, char p[]){
+	product *tmp = l;
+
+	while(tmp != NULL){
+		if(strcmp(tmp -> name, p) == 0){
+			printf("\n   %s costs %.2lf %s(s)\n", tmp -> name, tmp -> price, tmp -> p_unit);
+			return;	
+		}
+		
+		tmp = tmp -> next;
+	}
+
+	printf("\n   ERROR: product \"%s\" not found\n");
+	return;
 }
 
 void findItem(product *l, char p[]){
+	product *tmp = l;
+	
+	float q = 0;
+
+	while(tmp != NULL){
+                if(strcmp(tmp -> name, p) == 0){
+                        q = tmp -> quantity;
+			break;
+                }
+
+                tmp = tmp -> next;
+        }
+
+	printf("\n   We have %.2lf %s(s) in stock", q, tmp -> name);
 }
 
 int doIt(char data[]){
@@ -150,7 +180,7 @@ int doIt(char data[]){
 				scanf("%20s", tmp -> q_unit);
 
 				printf("How much does this product cost?\n");
-				scanf("%f", &tmp -> price);				
+				scanf("%lf", &tmp -> price);				
 
 				printf("What price unit does this product use?\n");
 				scanf("%20s", tmp -> p_unit);				
@@ -164,20 +194,17 @@ int doIt(char data[]){
 				printf("How many units are being purchased?\n");
 				scanf("%f", &tmp -> quantity);
 
-				float quantity = purchase(head, tmp -> name, tmp -> quantity);
+				purchase(head, tmp -> name, tmp -> quantity);
 	
-				printf("\n   %s now has %.2f units remaining\n", tmp -> name, quantity);
-				printf("\n   Press ENTER to continue\n");
-				getchar();
-				getchar();
 				break;
 			case 3:
+				printf("What item's price is being checked?\n");
+				scanf("%20s", tmp -> name);				
+	
+				check_price(head, tmp -> name);
 				break;
 			case 4:
 				showList(head);
-				printf("\nPress ENTER to continue\n");
-				getchar();
-				getchar();
 				break;
 			case 5:
 				printf("What is the name of the product being removed?\n");
@@ -186,16 +213,37 @@ int doIt(char data[]){
 				rmItem(head, tmp);
 				break;
 			case 6:
+				printf("What is the name of the product we are looking for?\n");
+				scanf("%20s", tmp -> name);
+
+				findItem(head, tmp -> name);
+				printf("\n");
 				break;
 			case 7:
+				tmp = head;
+				while(tmp != NULL){
+					findItem(tmp, tmp -> name);
+					tmp = tmp -> next;
+					printf("\n");
+				}
 				break;
-			default:
-				break;
+		}
+		if(choice != 8){
+			printf("\nPress ENTER to continue\n");
+			
+			//catches '\n'
+			getchar();
+		
+			//waits for user input
+			getchar();
 		}
 	}
 	//save data
 	
 	//deallocate data
-	free(head);
+	while(head != NULL){
+		free(head);
+		head = head -> next;
+	}
 	return 0;
 }
