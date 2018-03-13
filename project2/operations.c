@@ -44,9 +44,16 @@ int insert(product **l, product *node){
 		*l = tmp;
 	}
 	else{
-
+		if(strcmp(tmp -> name, node -> name) == 0){
+			printf("\n   ERROR:  Item already exists\n");
+			return 1;
+		}
 		while(tmp -> next != NULL){
 			tmp = tmp -> next;
+			if(strcmp(tmp -> name, node -> name) == 0){
+                        	printf("\n   ERROR:  Item already exists\n");
+				return 1;
+                	}
 		}
 		tmp -> next = node;
 	}
@@ -70,11 +77,6 @@ void rmItem(product *l, product *node){
 				tmp = tmp -> next;
 			}
 
-			/*if(tmp -> next == NULL){
-				printf("\n   ERROR:  Item not found\n");
-				return;
-			}*/
-
 			if(strcmp(tmp -> next -> name, node -> name) == 0){
 				product *children = tmp -> next -> next;
 				free(tmp -> next);
@@ -82,8 +84,6 @@ void rmItem(product *l, product *node){
 				return;
 			}
 		}
-
-	//	printf("\n    ERROR: Item not found\n");
 	
 	}
 	else{
@@ -98,6 +98,7 @@ void showList(product *l){
 	printf("\n   PRODUCT LIST:\n");
 		
 	while(tmp != NULL){
+
 		if(!(tmp -> price == 0 && tmp -> quantity == 0)){
 			printf("   %s\n", tmp -> name);
 		}
@@ -106,12 +107,10 @@ void showList(product *l){
 }
 
 int loadData(char inf[], product **l){
-	//printf("%s\n", inf);
 	FILE* fin;
 	fin = fopen(inf, "r");
 
 	if(fin == NULL){
-		printf("failed");
 		return 1;
 	}
 
@@ -146,7 +145,7 @@ int loadData(char inf[], product **l){
 
 
 	fclose(fin);
-
+	
 	return  0;
 }
 
@@ -164,6 +163,10 @@ int saveData(char outf[], product *l){
 	while(tmp != NULL){
 			if(!(tmp -> quantity == 0 && tmp -> price == 0)){
 				fprintf(fout, "%s %f %s %lf %s", tmp -> name, tmp -> quantity, tmp -> q_unit, tmp -> price, tmp -> p_unit);
+				//if(tmp -> next != NULL){
+				if(tmp -> quantity != 0 && tmp -> price != 0){
+					fprintf(fout, "\n");
+				}
 			}
 			tmp = tmp -> next;
 	}
@@ -211,7 +214,7 @@ void check_price(product *l, char p[]){
 
 	while(tmp != NULL){
 		if(strcmp(tmp -> name, p) == 0){
-			printf("\n   %s costs %.2lf %s(s)\n", tmp -> name, tmp -> price, tmp -> p_unit);
+			printf("\n   %s costs %.2lf %s\n", tmp -> name, tmp -> price, tmp -> p_unit);
 			return;	
 		}
 		
@@ -256,6 +259,7 @@ int doIt(char data[]){
 	head = (product*)malloc(sizeof(product));
 	loadData(data, &head);
 
+
 	//ask input
 	while(choice != 8){
 		print_messages();	
@@ -267,19 +271,28 @@ int doIt(char data[]){
 		switch(choice){
 			case 1:
 				printf("What is the product's name?\n");
-				scanf("%20s", tmp -> name);
+				scanf("%s", tmp -> name);	
+				if(strlen(tmp -> name) > 20){
+					*(tmp -> name + 20) = '\0';
+				}
 	
 				printf("How many of these products are there?\n");
 				scanf("%f", &tmp -> quantity);
 
 				printf("What quantity unit does this product use?\n");
-				scanf("%20s", tmp -> q_unit);
+				scanf("%s", tmp -> q_unit);
+				if(strlen(tmp -> q_unit) > 20){
+					*(tmp -> q_unit + 20) = '\0';
+				}
 
 				printf("How much does this product cost?\n");
 				scanf("%lf", &tmp -> price);				
 
 				printf("What price unit does this product use?\n");
-				scanf("%20s", tmp -> p_unit);				
+				scanf("%s", tmp -> p_unit);	
+				if(strlen(tmp -> p_unit) > 20){
+					*(tmp -> p_unit + 20) = '\0';
+				}			
 			
 				insert(&head, tmp);
 				break;
@@ -305,7 +318,10 @@ int doIt(char data[]){
 			case 5:
 				printf("What is the name of the product being removed?\n");
 				scanf("%20s", tmp -> name);
-
+				if(strlen(tmp -> name) > 20){
+					*(tmp -> name + 20) = '\0';
+				}			
+	
 				rmItem(head, tmp);
 				break;
 			case 6:
@@ -319,7 +335,6 @@ int doIt(char data[]){
 				while(tmp != NULL){
 					findItem(tmp, tmp -> name);
 					tmp = tmp -> next;
-					//printf("\n");
 				}
 				break;
 		}
