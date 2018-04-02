@@ -15,8 +15,6 @@ if [[ $var = "-"* ]]; then
 	#Checks if $var equals --help flag
 	if [[ $var = "--help" ]]; then
 		help_f=true
-		echo help statement requested
-
 
 	else
 		#Checks if each character of var matches other flags
@@ -60,7 +58,12 @@ if [[ $n_f = true ]]; then
 
 fi
 
+if [[ $help_f = true ]]; then
+	echo help statement requested
+fi
+
 #Exits for loop
 done
+
 
 echo
