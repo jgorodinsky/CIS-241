@@ -27,13 +27,11 @@ if [[ $var = "-"* ]]; then
 
 			if [[ $opt = "l" ]]; then
 
-				echo list of backup dir contents requested
 				l_f=true
 			
 		
 			elif [[ $opt = "n" ]]; then
 			
-				echo number of files and mem used requested
 				n_f=true
 
 			else
@@ -43,6 +41,23 @@ if [[ $var = "-"* ]]; then
 
 		done
 	fi
+fi
+
+
+#copy files here
+
+
+#if
+ 
+#fi
+
+if [[ $l_f = true ]]; then
+	echo list of backup dir contents requested
+fi
+
+if [[ $n_f = true ]]; then
+	echo number of files and mem used requested
+
 fi
 
 #Exits for loop
