@@ -1,3 +1,5 @@
+#!/bin/bash
+
 l_f=false
 n_f=false 
 help_f=false
@@ -5,11 +7,9 @@ help_f=false
 
 echo
 
-#Creates .backup directory if it doesn't exist
-mkdir -p "/home/.backup"
 
-#sets variable FILEPATH as the file path to the .backup directory
-FILEPATH= '/home/.backup'
+#Creates .backup directory if it doesn't exist
+mkdir -p "~/.backup"
 
 #Iterates through each argument passed to the script
 for var in "$@"
@@ -48,7 +48,7 @@ if [[ $var = "-"* ]]; then
 
 #$var is a file to be copied
 else
-	
+	cp $var ~/.backup
 
 if [[ $l_f = true ]]; then
 	echo list of backup dir contents requested
