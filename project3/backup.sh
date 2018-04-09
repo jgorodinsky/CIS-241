@@ -5,9 +5,6 @@ n_f=false
 help_f=false
 
 
-echo
-
-
 #Creates .backup directory if it doesn't exist
 mkdir -p "~/.backup"
 
@@ -47,8 +44,12 @@ if [[ $var = "-"* ]]; then
 	fi
 
 #$var is a file to be copied
-else
-	cp $var ~/.backup
+else	
+	if [[ -f $var  ]]; then
+		cp $var ~/.backup
+	elif [[ -d $var ]]; then
+		cp -r $var ~/.backup
+	fi
 
 if [[ $l_f = true ]]; then
 	echo list of backup dir contents requested
@@ -65,6 +66,3 @@ fi
 fi
 #Exits for loop
 done
-
-
-echo
