@@ -50,7 +50,7 @@ else
 	elif [[ -d $var ]]; then
 		cp -r $var ~/.backup
 	fi
-
+fi
 if [[ $l_f = true ]]; then
 	echo list of backup dir contents requested
 fi
@@ -60,9 +60,8 @@ if [[ $n_f = true ]]; then
 
 fi
 
-if [[ $help_f = true ]]; then
+if [ $help_f = true ]; then
 	echo help statement requested
-fi
 fi
 #Exits for loop
 done
