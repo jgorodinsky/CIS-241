@@ -55,6 +55,7 @@ fi
 #Exits for loop
 done
 
+#Actives selected options
 if [[ $echo_switch = true ]]; then
 	echo
 fi
@@ -65,14 +66,19 @@ fi
 
 if [[ $n_f = true ]]; then
 	ls -Rl ~/.backup
+	#stat -c "%y %s %n" ~/.backup
 fi
 
 if [ $help_f = true ]; then
-	echo
-
 	echo "backup.sh [options] targetFileList"
 	echo "-l: lists the contents of the .backup directory" 
 	echo "-n: shows the number of files in the .backup directory and how much space they consume"
+fi
+
+if [ "$#" -lt 1 ]; then
+	echo
+	echo_switch=true;
+	echo "backup.sh: illegal amount of parameters, try --help"
 fi
 
 if [[ $echo_switch = true ]]; then
