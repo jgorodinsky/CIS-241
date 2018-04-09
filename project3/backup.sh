@@ -68,7 +68,11 @@ if [[ $n_f = true ]]; then
 fi
 
 if [ $help_f = true ]; then
-	echo help statement requested
+	echo
+
+	echo "backup.sh [options] targetFileList"
+	echo "-l: lists the contents of the .backup directory" 
+	echo "-n: shows the number of files in the .backup directory and how much space they consume"
 fi
 
 if [[ $echo_switch = true ]]; then
