@@ -6,7 +6,7 @@ help_f=false
 echo_switch=false
 
 #Creates .backup directory if it doesn't exist
-mkdir -p "~/.backup"
+	mkdir -p ~/.backup
 
 #Iterates through each argument passed to the script
 for var in "$@"
@@ -65,8 +65,11 @@ if [[ $l_f = true ]]; then
 fi
 
 if [[ $n_f = true ]]; then
-	ls -Rl ~/.backup
-	#stat -c "%y %s %n" ~/.backup
+	size=$(ls -l ~/.backup | wc -l)
+	data=$(du -hb --total  ~/.backup)
+	
+	echo .backup contains $size files/directories
+	echo $data
 fi
 
 if [ $help_f = true ]; then
